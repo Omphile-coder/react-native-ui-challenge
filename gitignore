@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Expo / React Native generated files
+.expo/
+dist/
+build/
+
+# Native build artifacts
+android/.gradle/
+android/app/build/
+ios/Pods/
+ios/build/
+
+# Logs and system files
+*.log
+.DS_Store
+Thumbs.db
