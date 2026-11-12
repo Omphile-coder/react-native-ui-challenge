@@ -76,7 +76,7 @@ export default function App() {
             ]}
           >
             <SafeAreaView edges={["top"]}>
-              <ProductHeader />
+              <ProductHeader selectedType={selectedType} />
             </SafeAreaView>
 
             <View style={styles.stage}>
@@ -118,21 +118,19 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  // Light-blue background
-  container: {
-    flex: 1,
-    backgroundColor: "#BBDDEE",
-  },
+  // Light background
+ container: {
+  flex: 1,
+  backgroundColor: "#FFFFFF",
+},
 
-  // Entire rounded screen
-  productCard: {
-    flex: 1,
-    marginHorizontal: 10,
-    marginTop: 8,
-    marginBottom: 8,
-    borderRadius: 48,
-    overflow: "hidden",
-  },
+  // Entire  screen
+productCard: {
+  flex: 1,
+  margin: 0,
+  borderRadius: 0,
+  overflow: "hidden",
+},
 
   productSection: {
     flex: 1,

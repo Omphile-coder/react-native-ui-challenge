@@ -1,5 +1,7 @@
 import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+
 import { SymbolView } from "expo-symbols";
+import type { ProductType } from "./ProductSelectors";
 
 // Icons for each platform
 const icons = {
@@ -20,12 +22,42 @@ const icons = {
   },
 } as const;
 
-// TypeScript defines the allowed button properties
+// Product theme configurations
+const themes = {
+  Relax: {
+    logoColor: "#111111",
+
+    backButtonBg: "#FFFFFF",
+    backIconColor: "#111111",
+
+    profileButtonBg: "#E3A000",
+    profileIconColor: "#FFFFFF",
+
+    cartButtonBg: "#FFFFFF",
+    cartIconColor: "#111111",
+  },
+
+  Sleep: {
+    logoColor: "#FFFFFF",
+
+    backButtonBg: "#8F1F3B",
+    backIconColor: "#FFFFFF",
+
+    profileButtonBg: "#8F1F3B",
+    profileIconColor: "#FFFFFF",
+
+    cartButtonBg: "#FFFFFF",
+    cartIconColor: "#111111",
+  },
+};
+
+// Reusable button properties
 type HeaderButtonProps = {
   icon: keyof typeof icons;
   label: string;
   onPress: () => void;
-  gold?: boolean;
+  backgroundColor: string;
+  iconColor: string;
   badgeCount?: number;
 };
 
@@ -34,7 +66,8 @@ function HeaderButton({
   icon,
   label,
   onPress,
-  gold = false,
+  backgroundColor,
+  iconColor,
   badgeCount,
 }: HeaderButtonProps) {
   return (
@@ -44,15 +77,11 @@ function HeaderButton({
       onPress={onPress}
       style={({ pressed }) => [
         styles.circleButton,
-        gold && styles.goldButton,
+        { backgroundColor },
         pressed && styles.pressed,
       ]}
     >
-      <SymbolView
-        name={icons[icon]}
-        size={22}
-        tintColor={gold ? "#FFFFFF" : "#111111"}
-      />
+      <SymbolView name={icons[icon]} size={22} tintColor={iconColor} />
 
       {badgeCount !== undefined && (
         <View style={styles.badge}>
@@ -63,58 +92,62 @@ function HeaderButton({
   );
 }
 
+// Header component properties
+type ProductHeaderProps = {
+  selectedType: ProductType;
+};
 
-export default function ProductHeader() {
+export default function ProductHeader({ selectedType }: ProductHeaderProps) {
+  // Get theme based on selected product
+  const theme = themes[selectedType];
+
   return (
     <View style={styles.header}>
-      {/* Left side: Back button and logo */}
+      {/* Left: Back button and logo */}
       <View style={styles.brandGroup}>
         <HeaderButton
           icon="back"
           label="Go back"
-          onPress={() =>
-            Alert.alert("Back", "Navigation comes later.")
-          }
+          backgroundColor={theme.backButtonBg}
+          iconColor={theme.backIconColor}
+          onPress={() => Alert.alert("Back", "Navigation comes later.")}
         />
 
         <View style={styles.logo}>
           <Image
             source={require("../assets/images/logo.png")}
-            style={styles.logoImage}
+            style={[styles.logoImage, { tintColor: theme.logoColor }]}
             resizeMode="contain"
           />
 
-          <Text style={styles.logoText}>
+          <Text style={[styles.logoText, { color: theme.logoColor }]}>
             xefag
           </Text>
         </View>
       </View>
 
-      {/* Right side: Profile and shopping cart */}
+      {/* Right: Profile and cart */}
       <View style={styles.actions}>
         <HeaderButton
           icon="profile"
           label="Profile"
-          gold
-          onPress={() =>
-            Alert.alert("Profile", "Coming soon.")
-          }
+          backgroundColor={theme.profileButtonBg}
+          iconColor={theme.profileIconColor}
+          onPress={() => Alert.alert("Profile", "Coming soon.")}
         />
 
         <HeaderButton
           icon="cart"
           label="Shopping cart"
           badgeCount={3}
-          onPress={() =>
-            Alert.alert("Cart", "Coming soon.")
-          }
+          backgroundColor={theme.cartButtonBg}
+          iconColor={theme.cartIconColor}
+          onPress={() => Alert.alert("Cart", "Coming soon.")}
         />
       </View>
     </View>
   );
 }
-
-          
 
 const styles = StyleSheet.create({
   header: {
@@ -137,18 +170,15 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 
-  // Xefag logo image
   logoImage: {
     width: 36,
     height: 36,
-    tintColor: "#111111",
   },
 
   logoText: {
     fontSize: 27,
     fontWeight: "700",
     fontFamily: "Georgia",
-    color: "#111111",
   },
 
   actions: {
@@ -161,13 +191,8 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  goldButton: {
-    backgroundColor: "#E3A000",
   },
 
   pressed: {

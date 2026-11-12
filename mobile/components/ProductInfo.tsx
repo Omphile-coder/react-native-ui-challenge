@@ -1,15 +1,6 @@
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-
-import type {
-  ProductType,
-  ProductVariant,
-} from "./ProductSelectors";
+import type { ProductType, ProductVariant } from "./ProductSelectors";
 
 type ProductInfoProps = {
   selectedType: ProductType;
@@ -20,16 +11,37 @@ type ProductInfoProps = {
   onBuyNow: () => void;
 };
 
+// Theme configurations
+const themes = {
+  Relax: {
+    quantityButtonBg: "#111111",
+    quantitySymbol: "#FFC821",
+    buyButtonBg: "#FFCB27",
+    buyButtonText: "#111111",
+  },
+
+  Sleep: {
+    quantityButtonBg: "#8F1F3B",
+    quantitySymbol: "#FFFFFF",
+    buyButtonBg: "#C82C50",
+    buyButtonText: "#FFFFFF",
+  },
+};
+
 // Reusable quantity button
 type QuantityButtonProps = {
   symbol: "+" | "−";
   onPress: () => void;
+  backgroundColor: string;
+  symbolColor: string;
   disabled?: boolean;
 };
 
 function QuantityButton({
   symbol,
   onPress,
+  backgroundColor,
+  symbolColor,
   disabled = false,
 }: QuantityButtonProps) {
   return (
@@ -38,17 +50,16 @@ function QuantityButton({
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={
-        symbol === "+"
-          ? "Increase quantity"
-          : "Decrease quantity"
+        symbol === "+" ? "Increase quantity" : "Decrease quantity"
       }
       style={({ pressed }) => [
         styles.quantityButton,
+        { backgroundColor },
         disabled && styles.disabledButton,
         pressed && styles.pressed,
       ]}
     >
-      <Text style={styles.quantitySymbol}>
+      <Text style={[styles.quantitySymbol, { color: symbolColor }]}>
         {symbol}
       </Text>
     </Pressable>
@@ -63,6 +74,9 @@ export default function ProductInfo({
   onDecrease,
   onBuyNow,
 }: ProductInfoProps) {
+  // Select the theme based on the active product
+  const theme = themes[selectedType];
+
   return (
     <View style={styles.container}>
       {/* Product information */}
@@ -72,30 +86,28 @@ export default function ProductInfo({
         Dissolvable Wafers
       </Text>
 
-      <Text style={styles.weight}>
-        250 mg
-      </Text>
+      <Text style={styles.weight}>250 mg</Text>
 
       {/* Price and quantity controls */}
       <View style={styles.purchaseRow}>
-        <Text style={styles.price}>
-          $25.50
-        </Text>
+        <Text style={styles.price}>$25.50</Text>
 
         <View style={styles.quantityControls}>
           <QuantityButton
             symbol="−"
             onPress={onDecrease}
             disabled={quantity <= 1}
+            backgroundColor={theme.quantityButtonBg}
+            symbolColor={theme.quantitySymbol}
           />
 
-          <Text style={styles.quantity}>
-            {quantity}
-          </Text>
+          <Text style={styles.quantity}>{quantity}</Text>
 
           <QuantityButton
             symbol="+"
             onPress={onIncrease}
+            backgroundColor={theme.quantityButtonBg}
+            symbolColor={theme.quantitySymbol}
           />
         </View>
       </View>
@@ -107,10 +119,13 @@ export default function ProductInfo({
         accessibilityLabel="Buy Now"
         style={({ pressed }) => [
           styles.buyButton,
+          {
+            backgroundColor: theme.buyButtonBg,
+          },
           pressed && styles.pressed,
         ]}
       >
-        <Text style={styles.buyButtonText}>
+        <Text style={[styles.buyButtonText, { color: theme.buyButtonText }]}>
           Buy Now
         </Text>
       </Pressable>
@@ -164,14 +179,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#111111",
     alignItems: "center",
     justifyContent: "center",
   },
 
   quantitySymbol: {
     fontSize: 24,
-    color: "#FFC821",
     fontWeight: "400",
     lineHeight: 27,
   },
@@ -189,7 +202,6 @@ const styles = StyleSheet.create({
   },
 
   buyButton: {
-    backgroundColor: "#FFCB27",
     borderRadius: 30,
     height: 52,
     alignItems: "center",
@@ -199,7 +211,6 @@ const styles = StyleSheet.create({
   buyButtonText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#111111",
   },
 
   pressed: {

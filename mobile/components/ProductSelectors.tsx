@@ -13,10 +13,41 @@ type ProductSelectorsProps = {
 const productTypes: ProductType[] = ["Relax", "Sleep"];
 const variants: ProductVariant[] = [30, 60, 90];
 
-// Local image assets for the product tabs
+// Custom PNG icons
 const tabIcons = {
   Relax: require("../assets/images/Lotus Petal Circle Icon.png"),
   Sleep: require("../assets/images/Crescent Moon with Three Stars.png"),
+};
+
+// Theme configurations
+const themes = {
+  Relax: {
+    activeText: "#111111",
+    inactiveText: "#92721D",
+
+    activeVariantBg: "#111111",
+    activeVariantText: "#FFCA26",
+
+    inactiveVariantBg: "rgba(0,0,0,0.18)",
+    inactiveVariantText: "#6F5A1B",
+
+    activeIconTint: "#111111",
+    inactiveIconTint: "#92721D",
+  },
+
+  Sleep: {
+    activeText: "#FFFFFF",
+    inactiveText: "rgba(255,255,255,0.45)",
+
+    activeVariantBg: "#FFFFFF",
+    activeVariantText: "#C82C50",
+
+    inactiveVariantBg: "rgba(0,0,0,0.18)",
+    inactiveVariantText: "rgba(255,255,255,0.45)",
+
+    activeIconTint: "#FFFFFF",
+    inactiveIconTint: "rgba(255,255,255,0.45)",
+  },
 };
 
 export default function ProductSelectors({
@@ -25,6 +56,9 @@ export default function ProductSelectors({
   onTypeChange,
   onVariantChange,
 }: ProductSelectorsProps) {
+  // Select the theme based on the active product
+  const theme = themes[selectedType];
+
   return (
     <View style={styles.container}>
       {/* Relax and Sleep tabs */}
@@ -43,15 +77,28 @@ export default function ProductSelectors({
               }}
               style={({ pressed }) => [styles.tab, pressed && styles.pressed]}
             >
-              {/* Custom image icon */}
+              {/* Custom PNG icon */}
               <Image
                 source={tabIcons[type]}
-                style={[styles.tabIcon, !isSelected && styles.inactiveIcon]}
+                style={[
+                  styles.tabIcon,
+                  {
+                    tintColor: isSelected
+                      ? theme.activeIconTint
+                      : theme.inactiveIconTint,
+                  },
+                ]}
                 resizeMode="contain"
               />
 
+              {/* Product label */}
               <Text
-                style={[styles.tabText, !isSelected && styles.inactiveText]}
+                style={[
+                  styles.tabText,
+                  {
+                    color: isSelected ? theme.activeText : theme.inactiveText,
+                  },
+                ]}
               >
                 {type}
               </Text>
@@ -76,14 +123,22 @@ export default function ProductSelectors({
               }}
               style={({ pressed }) => [
                 styles.variantButton,
-                isSelected && styles.activeVariant,
+                {
+                  backgroundColor: isSelected
+                    ? theme.activeVariantBg
+                    : theme.inactiveVariantBg,
+                },
                 pressed && styles.pressed,
               ]}
             >
               <Text
                 style={[
                   styles.variantText,
-                  isSelected && styles.activeVariantText,
+                  {
+                    color: isSelected
+                      ? theme.activeVariantText
+                      : theme.inactiveVariantText,
+                  },
                 ]}
               >
                 {variant}
@@ -119,25 +174,14 @@ const styles = StyleSheet.create({
     minHeight: 42,
   },
 
-  // Custom PNG icon styling
   tabIcon: {
     width: 30,
     height: 30,
-    tintColor: "#111111",
-  },
-
-  inactiveIcon: {
-    tintColor: "#92721D",
   },
 
   tabText: {
     fontSize: 15,
     fontWeight: "500",
-    color: "#111111",
-  },
-
-  inactiveText: {
-    color: "#92721D",
   },
 
   variantColumn: {
@@ -149,23 +193,13 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#C99D1C",
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  activeVariant: {
-    backgroundColor: "#111111",
   },
 
   variantText: {
     fontSize: 20,
     fontWeight: "500",
-    color: "#FFE17B",
-  },
-
-  activeVariantText: {
-    color: "#FFCA26",
   },
 
   pressed: {

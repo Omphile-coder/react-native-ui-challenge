@@ -1,25 +1,26 @@
-
 import { Image, StyleSheet, View } from "react-native";
 import type { ProductType } from "./ProductSelectors";
-
-// Define the available product images
-const productImages = {
-  Relax: require("../assets/images/xefag-relax.png"),
-  Sleep: require("../assets/images/xefag-sleep.png"),
-};
 
 type ProductShowcaseProps = {
   selectedType: ProductType;
 };
 
+const productImages = {
+  Relax: require("../assets/images/xefag-relax.png"),
+  Sleep: require("../assets/images/xefag-sleep.png"),
+};
+
 export default function ProductShowcase({
   selectedType,
 }: ProductShowcaseProps) {
+  const imageStyle =
+    selectedType === "Sleep" ? styles.sleepImage : styles.relaxImage;
+
   return (
     <View style={styles.container}>
       <Image
         source={productImages[selectedType]}
-        style={styles.productImage}
+        style={[styles.productImage, imageStyle]}
         resizeMode="contain"
       />
     </View>
@@ -35,7 +36,19 @@ const styles = StyleSheet.create({
   },
 
   productImage: {
-    width: "85%",
-    height: "85%",
+    maxWidth: 320,
+    maxHeight: 420,
+  },
+
+  // Relax asset
+  relaxImage: {
+    width: "63%",
+    height: "63%",
+  },
+
+  // Sleep asset includes more empty/petal space, so scale it up
+  sleepImage: {
+    width: "72%",
+    height: "72%",
   },
 });
