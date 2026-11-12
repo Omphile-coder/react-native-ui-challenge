@@ -1,11 +1,7 @@
-
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import {
-  SafeAreaProvider,
-  SafeAreaView,
-} from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import ProductHeader from "./components/ProductHeader";
 import ProductSelectors, {
@@ -16,19 +12,24 @@ import ProductShowcase from "./components/ProductShowcase";
 
 export default function App() {
   // Product selection state
-  const [selectedType, setSelectedType] =
-    useState<ProductType>("Relax");
+  const [selectedType, setSelectedType] = useState<ProductType>("Relax");
 
-  const [selectedVariant, setSelectedVariant] =
-    useState<ProductVariant>(30);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(30);
+
+  const productBackground = selectedType === "Sleep" ? "#C82C50" : "#FFC821";
 
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: productBackground }]}>
         <StatusBar style="dark" />
 
         {/* Main yellow product section */}
-        <View style={styles.productSection}>
+        <View
+          style={[
+            styles.productSection,
+            { backgroundColor: productBackground },
+          ]}
+        >
           {/* Header */}
           <SafeAreaView edges={["top"]}>
             <ProductHeader />
@@ -47,27 +48,21 @@ export default function App() {
             </View>
 
             {/* Xefag product image */}
-            <ProductShowcase />
+            <ProductShowcase selectedType={selectedType} />
           </View>
         </View>
 
         {/* White product information panel */}
         <View style={styles.infoSection}>
           <Text style={styles.productName}>
-            Relax 30
+            {selectedType} {selectedVariant}
           </Text>
 
-          <Text style={styles.productName}>
-            Dissolvable Wafers
-          </Text>
+          <Text style={styles.productName}>Dissolvable Wafers</Text>
 
-          <Text style={styles.weight}>
-            250 mg
-          </Text>
+          <Text style={styles.weight}>250 mg</Text>
 
-          <Text style={styles.price}>
-            $25.50
-          </Text>
+          <Text style={styles.price}>$25.50</Text>
         </View>
       </View>
     </SafeAreaProvider>
