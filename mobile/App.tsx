@@ -12,9 +12,10 @@ import ProductSelectors, {
   type ProductType,
   type ProductVariant,
 } from "./components/ProductSelectors";
+import ProductShowcase from "./components/ProductShowcase";
 
 export default function App() {
-  // State for product selections
+  // Product selection state
   const [selectedType, setSelectedType] =
     useState<ProductType>("Relax");
 
@@ -26,33 +27,31 @@ export default function App() {
       <View style={styles.container}>
         <StatusBar style="dark" />
 
-        {/* Main product area */}
+        {/* Main yellow product section */}
         <View style={styles.productSection}>
+          {/* Header */}
           <SafeAreaView edges={["top"]}>
             <ProductHeader />
           </SafeAreaView>
 
-          {/* Interactive product selectors */}
-          <ProductSelectors
-            selectedType={selectedType}
-            selectedVariant={selectedVariant}
-            onTypeChange={setSelectedType}
-            onVariantChange={setSelectedVariant}
-          />
+          {/* Product display area */}
+          <View style={styles.stage}>
+            {/* Interactive selectors */}
+            <View style={styles.selectorsOverlay}>
+              <ProductSelectors
+                selectedType={selectedType}
+                selectedVariant={selectedVariant}
+                onTypeChange={setSelectedType}
+                onVariantChange={setSelectedVariant}
+              />
+            </View>
 
-          {/* Product showcase placeholder */}
-          <View style={styles.showcase}>
-            <Text style={styles.placeholder}>
-              Product Section
-            </Text>
-
-            <Text style={styles.selectionText}>
-              Selected: {selectedType} {selectedVariant}
-            </Text>
+            {/* Xefag product image */}
+            <ProductShowcase />
           </View>
         </View>
 
-        {/* Product information */}
+        {/* White product information panel */}
         <View style={styles.infoSection}>
           <Text style={styles.productName}>
             Relax 30
@@ -81,29 +80,31 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFC821",
   },
 
+  // Main yellow section
   productSection: {
     flex: 1,
     backgroundColor: "#FFC821",
   },
 
-  showcase: {
+  // Product image and selectors container
+  stage: {
     flex: 1,
+    width: "100%",
+    minHeight: 0,
     justifyContent: "center",
     alignItems: "center",
   },
 
-  placeholder: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#111111",
+  // Selectors appear above the product image
+  selectorsOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
   },
 
-  selectionText: {
-    fontSize: 15,
-    color: "#725500",
-    marginTop: 12,
-  },
-
+  // Bottom white information panel
   infoSection: {
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 45,
