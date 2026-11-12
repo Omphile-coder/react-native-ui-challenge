@@ -1,10 +1,6 @@
-
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import {
-  SafeAreaProvider,
-  SafeAreaView,
-} from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import ProductHeader from "./components/ProductHeader";
 
@@ -21,29 +17,19 @@ export default function App() {
           </SafeAreaView>
 
           <View style={styles.showcase}>
-            <Text style={styles.placeholder}>
-              Product Section
-            </Text>
+            <Text style={styles.placeholder}>Product Section</Text>
           </View>
         </View>
 
         {/* White information panel */}
         <View style={styles.infoSection}>
-          <Text style={styles.productName}>
-            Relax 30
-          </Text>
+          <Text style={styles.productName}>Relax 30</Text>
 
-          <Text style={styles.productName}>
-            Dissolvable Wafers
-          </Text>
+          <Text style={styles.productName}>Dissolvable Wafers</Text>
 
-          <Text style={styles.weight}>
-            250 mg
-          </Text>
+          <Text style={styles.weight}>250 mg</Text>
 
-          <Text style={styles.price}>
-            $25.50
-          </Text>
+          <Text style={styles.price}>$25.50</Text>
         </View>
       </View>
     </SafeAreaProvider>
@@ -53,7 +39,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#BBDDEE",
+    backgroundColor: "#FFC821",
   },
   productSection: {
     flex: 1,
