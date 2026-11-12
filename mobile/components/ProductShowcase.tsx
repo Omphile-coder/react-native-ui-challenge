@@ -1,10 +1,13 @@
-import { Image, StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { Image, StyleSheet, View, type LayoutChangeEvent } from "react-native";
+
 import type { ProductType } from "./ProductSelectors";
 
 type ProductShowcaseProps = {
   selectedType: ProductType;
 };
 
+// Product images
 const productImages = {
   Relax: require("../assets/images/xefag-relax.png"),
   Sleep: require("../assets/images/xefag-sleep.png"),
@@ -13,14 +16,28 @@ const productImages = {
 export default function ProductShowcase({
   selectedType,
 }: ProductShowcaseProps) {
-  const imageStyle =
-    selectedType === "Sleep" ? styles.sleepImage : styles.relaxImage;
+  const [imageSize, setImageSize] = useState(0);
+
+  // Calculate a responsive image frame
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout;
+
+    const size = Math.min(width * 0.85, height * 0.92, 340);
+
+    setImageSize(size);
+  };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={handleLayout}>
       <Image
         source={productImages[selectedType]}
-        style={[styles.productImage, imageStyle]}
+        style={[
+          styles.productImage,
+          {
+            width: imageSize,
+            height: imageSize,
+          },
+        ]}
         resizeMode="contain"
       />
     </View>
@@ -31,24 +48,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
   },
 
   productImage: {
-    maxWidth: 320,
-    maxHeight: 420,
-  },
-
-  // Relax asset
-  relaxImage: {
-    width: "63%",
-    height: "63%",
-  },
-
-  // Sleep asset includes more empty/petal space, so scale it up
-  sleepImage: {
-    width: "72%",
-    height: "72%",
+    alignSelf: "center",
   },
 });
