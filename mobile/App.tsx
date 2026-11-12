@@ -1,7 +1,15 @@
+
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import {
+  Alert,
+  StyleSheet,
+  View,
+} from "react-native";
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+} from "react-native-safe-area-context";
 
 import ProductHeader from "./components/ProductHeader";
 import ProductSelectors, {
@@ -9,60 +17,100 @@ import ProductSelectors, {
   type ProductVariant,
 } from "./components/ProductSelectors";
 import ProductShowcase from "./components/ProductShowcase";
+import ProductInfo from "./components/ProductInfo";
 
 export default function App() {
-  // Product selection state
-  const [selectedType, setSelectedType] = useState<ProductType>("Relax");
+  // Product state
+  const [selectedType, setSelectedType] =
+    useState<ProductType>("Relax");
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(30);
+  const [selectedVariant, setSelectedVariant] =
+    useState<ProductVariant>(30);
 
-  const productBackground = selectedType === "Sleep" ? "#C82C50" : "#FFC821";
+  // Quantity state
+  const [quantity, setQuantity] = useState(2);
+
+  // Dynamic product background
+  const productBackground =
+    selectedType === "Sleep"
+      ? "#C82C50"
+      : "#FFC821";
+
+  // Increase quantity
+  const increaseQuantity = () => {
+    setQuantity((current) => current + 1);
+  };
+
+  // Decrease quantity (minimum 1)
+  const decreaseQuantity = () => {
+    setQuantity((current) =>
+      Math.max(1, current - 1)
+    );
+  };
+
+  // Temporary checkout interaction
+  const handleBuyNow = () => {
+    Alert.alert(
+      "Demo Checkout",
+      `You selected ${quantity} x ${selectedType} ${selectedVariant}.\n\nCheckout is not implemented yet.`
+    );
+  };
 
   return (
     <SafeAreaProvider>
-      <View style={[styles.container, { backgroundColor: productBackground }]}>
+      <View style={styles.container}>
         <StatusBar style="dark" />
 
-        {/* Main yellow product section */}
+        {/* Main rounded product screen */}
         <View
           style={[
-            styles.productSection,
+            styles.productCard,
             { backgroundColor: productBackground },
           ]}
         >
-          {/* Header */}
-          <SafeAreaView edges={["top"]}>
-            <ProductHeader />
-          </SafeAreaView>
+          {/* Upper product area */}
+          <View
+            style={[
+              styles.productSection,
+              { backgroundColor: productBackground },
+            ]}
+          >
+            <SafeAreaView edges={["top"]}>
+              <ProductHeader />
+            </SafeAreaView>
 
-          {/* Product display area */}
-          <View style={styles.stage}>
-            {/* Interactive selectors */}
-            <View style={styles.selectorsOverlay}>
-              <ProductSelectors
+            <View style={styles.stage}>
+              {/* Product tabs and variants */}
+              <View style={styles.selectorsOverlay}>
+                <ProductSelectors
+                  selectedType={selectedType}
+                  selectedVariant={selectedVariant}
+                  onTypeChange={setSelectedType}
+                  onVariantChange={setSelectedVariant}
+                />
+              </View>
+
+              {/* Product image */}
+              <ProductShowcase
                 selectedType={selectedType}
-                selectedVariant={selectedVariant}
-                onTypeChange={setSelectedType}
-                onVariantChange={setSelectedVariant}
               />
             </View>
-
-            {/* Xefag product image */}
-            <ProductShowcase selectedType={selectedType} />
           </View>
-        </View>
 
-        {/* White product information panel */}
-        <View style={styles.infoSection}>
-          <Text style={styles.productName}>
-            {selectedType} {selectedVariant}
-          </Text>
-
-          <Text style={styles.productName}>Dissolvable Wafers</Text>
-
-          <Text style={styles.weight}>250 mg</Text>
-
-          <Text style={styles.price}>$25.50</Text>
+          {/* Bottom product information */}
+          <SafeAreaView
+            edges={["bottom"]}
+            style={styles.infoSection}
+          >
+            <ProductInfo
+              selectedType={selectedType}
+              selectedVariant={selectedVariant}
+              quantity={quantity}
+              onIncrease={increaseQuantity}
+              onDecrease={decreaseQuantity}
+              onBuyNow={handleBuyNow}
+            />
+          </SafeAreaView>
         </View>
       </View>
     </SafeAreaProvider>
@@ -70,27 +118,37 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  // Light-blue background
   container: {
     flex: 1,
-    backgroundColor: "#FFC821",
+    backgroundColor: "#BBDDEE",
   },
 
-  // Main yellow section
+  // Entire rounded screen
+  productCard: {
+    flex: 1,
+    marginHorizontal: 10,
+    marginTop: 8,
+    marginBottom: 8,
+    borderRadius: 48,
+    overflow: "hidden",
+  },
+
   productSection: {
     flex: 1,
-    backgroundColor: "#FFC821",
+    minHeight: 0,
   },
 
-  // Product image and selectors container
+  // Product display area
   stage: {
     flex: 1,
-    width: "100%",
     minHeight: 0,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
 
-  // Selectors appear above the product image
+  // Floating product selectors
   selectorsOverlay: {
     position: "absolute",
     top: 0,
@@ -99,30 +157,11 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
 
-  // Bottom white information panel
+  // Rounded white panel
   infoSection: {
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 45,
     borderTopRightRadius: 45,
-    padding: 30,
-  },
-
-  productName: {
-    fontSize: 30,
-    fontWeight: "700",
-    color: "#111111",
-  },
-
-  weight: {
-    fontSize: 17,
-    color: "#777777",
-    marginTop: 12,
-  },
-
-  price: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#111111",
-    marginTop: 24,
+    marginTop: -14,
   },
 });
