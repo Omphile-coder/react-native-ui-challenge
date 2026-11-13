@@ -6,6 +6,10 @@ The project is based on a Xefag product-page design featuring **Relax** and **Sl
 
 > **Project type:** Educational UI implementation. This is not an official Xefag application or a functioning e-commerce service.
 
+## Inspiration image
+
+<img src="/mobile/assets/inspo.png" width="" height="" />
+
 ## Features
 
 - **Two product themes:** Switch between Relax (yellow, `#FFC821`) and Sleep (magenta, `#C82C50`).
@@ -21,15 +25,15 @@ The project is based on a Xefag product-page design featuring **Relax** and **Sl
 
 ## Tech Stack
 
-| Technology | Purpose |
-| --- | --- |
-| React Native | Native mobile interface |
-| Expo | Development and device testing |
-| TypeScript | Typed components, props, and state |
-| React Native `StyleSheet` and Flexbox | Layout and styling |
-| React Native `Animated` | Theme and product-image transitions |
-| `react-native-safe-area-context` | Device safe areas |
-| `expo-symbols` and `@expo/vector-icons` | Interface icons |
+| Technology                              | Purpose                             |
+| --------------------------------------- | ----------------------------------- |
+| React Native                            | Native mobile interface             |
+| Expo                                    | Development and device testing      |
+| TypeScript                              | Typed components, props, and state  |
+| React Native `StyleSheet` and Flexbox   | Layout and styling                  |
+| React Native `Animated`                 | Theme and product-image transitions |
+| `react-native-safe-area-context`        | Device safe areas                   |
+| `expo-symbols` and `@expo/vector-icons` | Interface icons                     |
 
 ## Project Structure
 
