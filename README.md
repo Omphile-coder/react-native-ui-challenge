@@ -6,9 +6,10 @@ The project is based on a Xefag product-page design featuring **Relax** and **Sl
 
 > **Project type:** Educational UI implementation. This is not an official Xefag application or a functioning e-commerce service.
 
-## Inspiration image
+## Inspiration image and 
 
 <img src="/mobile/assets/inspo.png" width="" height="" />
+Link: [Google drive](https://drive.google.com/drive/folders/1ZvGVQ0dcSA6ui0ZIxgEHdhx1oJDvG2Ae?usp=sharing)
 
 ## Features
 
