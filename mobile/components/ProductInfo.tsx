@@ -1,7 +1,19 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { ProductType, ProductVariant } from "./ProductSelectors";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+
+import type {
+  ProductType,
+  ProductVariant,
+} from "./ProductSelectors";
+
+// Product information props
 type ProductInfoProps = {
   selectedType: ProductType;
   selectedVariant: ProductVariant;
@@ -28,20 +40,21 @@ const themes = {
   },
 };
 
-// Reusable quantity button
+// Reusable quantity button props
 type QuantityButtonProps = {
-  symbol: "+" | "−";
+  icon: "plus-square-o" | "minus-square-o";
   onPress: () => void;
   backgroundColor: string;
-  symbolColor: string;
+  iconColor: string;
   disabled?: boolean;
 };
 
+// Reusable quantity button
 function QuantityButton({
-  symbol,
+  icon,
   onPress,
   backgroundColor,
-  symbolColor,
+  iconColor,
   disabled = false,
 }: QuantityButtonProps) {
   return (
@@ -50,7 +63,9 @@ function QuantityButton({
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={
-        symbol === "+" ? "Increase quantity" : "Decrease quantity"
+        icon === "plus-square-o"
+          ? "Increase quantity"
+          : "Decrease quantity"
       }
       style={({ pressed }) => [
         styles.quantityButton,
@@ -59,9 +74,11 @@ function QuantityButton({
         pressed && styles.pressed,
       ]}
     >
-      <Text style={[styles.quantitySymbol, { color: symbolColor }]}>
-        {symbol}
-      </Text>
+      <FontAwesome
+        name={icon}
+        size={24}
+        color={iconColor}
+      />
     </Pressable>
   );
 }
@@ -86,28 +103,36 @@ export default function ProductInfo({
         Dissolvable Wafers
       </Text>
 
-      <Text style={styles.weight}>250 mg</Text>
+      <Text style={styles.weight}>
+        250 mg
+      </Text>
 
       {/* Price and quantity controls */}
       <View style={styles.purchaseRow}>
-        <Text style={styles.price}>$25.50</Text>
+        <Text style={styles.price}>
+          $25.50
+        </Text>
 
         <View style={styles.quantityControls}>
+          {/* Decrease quantity */}
           <QuantityButton
-            symbol="−"
+            icon="minus-square-o"
             onPress={onDecrease}
             disabled={quantity <= 1}
             backgroundColor={theme.quantityButtonBg}
-            symbolColor={theme.quantitySymbol}
+            iconColor={theme.quantitySymbol}
           />
 
-          <Text style={styles.quantity}>{quantity}</Text>
+          <Text style={styles.quantity}>
+            {quantity}
+          </Text>
 
+          {/* Increase quantity */}
           <QuantityButton
-            symbol="+"
+            icon="plus-square-o"
             onPress={onIncrease}
             backgroundColor={theme.quantityButtonBg}
-            symbolColor={theme.quantitySymbol}
+            iconColor={theme.quantitySymbol}
           />
         </View>
       </View>
@@ -125,7 +150,12 @@ export default function ProductInfo({
           pressed && styles.pressed,
         ]}
       >
-        <Text style={[styles.buyButtonText, { color: theme.buyButtonText }]}>
+        <Text
+          style={[
+            styles.buyButtonText,
+            { color: theme.buyButtonText },
+          ]}
+        >
           Buy Now
         </Text>
       </Pressable>
@@ -181,12 +211,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  quantitySymbol: {
-    fontSize: 24,
-    fontWeight: "400",
-    lineHeight: 27,
   },
 
   quantity: {
