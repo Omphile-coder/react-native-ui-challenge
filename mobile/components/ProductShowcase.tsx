@@ -1,45 +1,79 @@
-import { useState } from "react";
-import { Image, StyleSheet, View, type LayoutChangeEvent } from "react-native";
 
-import type { ProductType } from "./ProductSelectors";
+import { useState } from "react";
+import {
+  Animated,
+  StyleSheet,
+  View,
+  type LayoutChangeEvent,
+} from "react-native";
 
 type ProductShowcaseProps = {
-  selectedType: ProductType;
+  transition: Animated.Value;
 };
 
-// Product images
 const productImages = {
   Relax: require("../assets/images/xefag-relax.png"),
   Sleep: require("../assets/images/xefag-sleep.png"),
 };
 
 export default function ProductShowcase({
-  selectedType,
+  transition,
 }: ProductShowcaseProps) {
   const [imageSize, setImageSize] = useState(0);
 
-  // Calculate a responsive image frame
+  // Keep the image frame responsive
   const handleLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
 
-    const size = Math.min(width * 0.85, height * 0.92, 340);
+    const size = Math.round(
+      Math.min(width * 0.85, height * 0.92, 340)
+    );
 
-    setImageSize(size);
+    setImageSize((current) =>
+      current === size ? current : size
+    );
   };
 
+  // Relax fades out as Sleep fades in
+  const relaxOpacity = transition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+  });
+
   return (
-    <View style={styles.container} onLayout={handleLayout}>
-      <Image
-        source={productImages[selectedType]}
+    <View
+      style={styles.container}
+      onLayout={handleLayout}
+    >
+      <View
         style={[
-          styles.productImage,
+          styles.imageFrame,
           {
             width: imageSize,
             height: imageSize,
           },
         ]}
-        resizeMode="contain"
-      />
+      >
+        {/* Relax bottle */}
+        <Animated.Image
+          source={productImages.Relax}
+          style={[
+            styles.productImage,
+            { opacity: relaxOpacity },
+          ]}
+          resizeMode="contain"
+        />
+
+        {/* Sleep bottle */}
+        <Animated.Image
+          source={productImages.Sleep}
+          style={[
+            styles.productImage,
+            { opacity: transition },
+          ]}
+          resizeMode="contain"
+        />
+      </View>
     </View>
   );
 }
@@ -48,11 +82,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    alignItems: "center",
+    minHeight: 0,
     justifyContent: "center",
+    alignItems: "center",
+  },
+
+  imageFrame: {
+    position: "relative",
+    alignSelf: "center",
   },
 
   productImage: {
-    alignSelf: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
   },
 });
